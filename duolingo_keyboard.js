@@ -6,19 +6,21 @@
 // @author       Steven
 // @match        https://www.duolingo.com/*
 // ==/UserScript==
-var query = "";
+var query = '';
 document.addEventListener('keyup', e => {
-  if (e.key == " " && query.length > 0) {
+  if (e.key == ' ' && query.length > 0) {
     query = query.toLowerCase();
     var matches = Array.from(document.querySelectorAll('div._30i_q button.iNLw3._1mSJd:not([disabled])'))
-      .filter(v => accent_fold(v.innerText).toLowerCase().startsWith(query) ? true : false);
+      .filter(v => accent_fold(v.innerText).toLowerCase()
+        .startsWith(query) ? true : false)
+      .sort((a, b) => a.innerText < b.innerText ? -1 : (a.innerText > b.innerText) ? 1 : 0);
     var index = matches.map(v => v.innerText.toLowerCase()).indexOf(query);
-    var predict = matches[index > -1 ? index : 0]
+    var predict = matches[index > -1 ? index : 0];
     if (predict) {
       predict.click();
     }
-    query = "";
-  } else if (e.key == "Backspace") {
+    query = '';
+  } else if (e.key == 'Backspace') {
     if (query.length > 0) {
       query = query.substr(0, query.length - 1);
     } else {
@@ -29,8 +31,8 @@ document.addEventListener('keyup', e => {
     }
   } else if (e.key.length == 1) {
     query += e.key;
-  } else if (e.key == "Enter") {
-    query = "";
+  } else if (e.key == 'Enter') {
+    query = '';
   }
   var display = document.querySelector('div.FnRYl');
   if (display) {
@@ -38,7 +40,7 @@ document.addEventListener('keyup', e => {
   }
 });
 
-function accent_fold(string) {
+function accent_fold(string = '') {
   var accent_map = {
     'ẚ': 'a',
     'Á': 'a',
@@ -694,9 +696,6 @@ function accent_fold(string) {
     'ǯ': 'z',
     'ƺ': 'z'
   };
-  if (!string) {
-    return '';
-  }
   var temp = '';
   for (var i = 0; i < string.length; i++) {
     temp += accent_map[string.charAt(i)] || string.charAt(i);
